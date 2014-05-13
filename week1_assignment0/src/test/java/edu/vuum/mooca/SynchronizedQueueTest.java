@@ -1,21 +1,18 @@
 package edu.vuum.mooca;
-
 import static org.junit.Assert.*;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import edu.vuum.mooca.BuggyBlockingQueue;
-import edu.vuum.mooca.SynchronizedQueue;
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.vuum.mooca.SynchronizedQueue.*;
 
 /**
- * @class edu.vuum.mooca.SynchronizedQueueTest
+ * @class SynchronizedQueueTest
  *
  * @brief This class tests queues for proper functionality by 
- * 	using the testQueue method defined in SynchronizedQueue.java
+ * 	  using the testQueue method defined in SynchronizedQueue.java
  */
 public class SynchronizedQueueTest {
     /**
@@ -29,11 +26,17 @@ public class SynchronizedQueueTest {
      * @return result. If SynchronizedQueue test ran properly, returns
      * null. If not, returns error message.
      */
-    static String runQueueTest(QueueAdapter<Integer> queue) {
+    static String runQueueTest(String qName, QueueAdapter<Integer> queue) {
+    	System.out.println("Starting " + qName + " test...");
 
         SynchronizedQueueResult result =
             SynchronizedQueue.testQueue(queue);
 
+        System.out.println("End " + qName + " test.\n");
+        System.out.println("See JUnit view for results -- \n" +
+                           "Green check-marks denote program correctness. \n" +
+                           "Blue x-marks indicate a problem with your implementation. \n");
+        
         if (result != SynchronizedQueueResult.RAN_PROPERLY)
             return result.getString();
 		
@@ -59,7 +62,7 @@ public class SynchronizedQueueTest {
     public void arrayBlockingQueueTest() {
         QueueAdapter<Integer> queueAdapter =
             new QueueAdapter<Integer>(new ArrayBlockingQueue<Integer>(queueSize));
-        String errors = runQueueTest(queueAdapter);
+        String errors = runQueueTest("ArrayBlockingQueue", queueAdapter);
 
         assertNull("Error occurred: " + 
                    errors,
@@ -67,14 +70,16 @@ public class SynchronizedQueueTest {
     }
 	
     /**
-     * Tests the ArrayBlockingQueue, which succeeds if the
-     * SynchronizedQueueTester fails.
+     * Tests the BuggyBlockingQueue, an intentionally flawed class.
+     * The buggyBlockingQueueTest() will succeed if the testQueue
+     * method fails, i.e., this test succeeds if our queue causes
+     * errors (which is what we expect)!
      */
     @Test
     public void buggyBlockingQueueTest() {
         QueueAdapter<Integer> queueAdapter =
             new QueueAdapter<Integer>(new BuggyBlockingQueue<Integer>(queueSize));
-        String errors = runQueueTest(queueAdapter);
+        String errors = runQueueTest("BuggyBlockingQueue", queueAdapter);
         assertNotNull("Test should not complete without errors. " +
                       "BuggyBlockingQueue is intended to function incorrectly.",
                       errors);
