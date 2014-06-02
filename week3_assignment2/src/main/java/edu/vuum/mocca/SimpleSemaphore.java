@@ -1,7 +1,6 @@
 package edu.vuum.mocca;
 
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 
 /**
@@ -86,9 +85,15 @@ public class SimpleSemaphore {
      */
     void release() {
         // TODO - you fill in here.
-      if (availablePermits < maxPermits) {
-        availablePermits++;
-        noPermitsAvailable.signal();
+      reentrantLock.lock();
+      try {
+        if (availablePermits < maxPermits) {
+          availablePermits++;
+          noPermitsAvailable.signal();
+        }
+      }
+      finally {
+        reentrantLock.unlock();
       }
     }
 
