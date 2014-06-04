@@ -87,10 +87,10 @@ public class SimpleSemaphore {
     // TODO - you fill in here.
     reentrantLock.lock();
     try {
-      if (availablePermits < maxPermits) {
+      //if (availablePermits < maxPermits) {
         availablePermits++;
         noPermitsAvailable.signal();
-      }
+      //}
     }
     finally {
       reentrantLock.unlock();
